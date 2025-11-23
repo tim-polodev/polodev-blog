@@ -1,14 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import remarkGfm from 'remark-gfm';
-// import rehypeStarryNight from 'rehype-starry-night'
 import rehypeRaw from "rehype-raw";
-// import {Article} from '@/services/cmsApi';
-// import {MarkdownHooks} from "react-markdown";
 import MDEditor from '@uiw/react-md-editor';
 import {CustomNavbar} from "@/components/CustomNavbar";
 import {Article} from "@/services/cmsApi";
-import Image from "next/image";
-import {formatDate} from "@/utils";
 
 export const ArticleContent = ({article}: { article: Article }) => {
     const [markdownContent, setMarkdownContent] = useState("");
