@@ -7,17 +7,20 @@ import {Article} from "@/services/cmsApi";
 import {formatDate, slugify} from "@/utils";
 import Image from "next/image";
 import {TableOfContents, TOCEntry} from "@/components/TableOfContents";
-import {unified} from 'unified';
+import {unified, Plugin} from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import {visit} from 'unist-util-visit';
 import rehypeSlug from 'rehype-slug';
+import {Root, Heading} from 'mdast';
+import {VFile} from 'vfile';
+import {toString} from 'mdast-util-to-string';
 
-const extractHeadings = () => (tree: any, file: any) => {
+const extractHeadings: Plugin<[], Root> = () => (tree: Root, file: VFile) => {
     const toc: TOCEntry[] = [];
-    visit(tree, 'heading', (node: any) => {
-        const text = node.children.map((child: any) => child.value).join('');
+    visit(tree, 'heading', (node: Heading) => {
+        const text = toString(node);
         if (text) {
             toc.push({
                 text,
