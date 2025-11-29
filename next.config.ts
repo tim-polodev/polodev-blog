@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
                 port: '',
                 pathname: '/**',
             },
+            // Cloudfront distribution
+            {
+                protocol: 'https',
+                hostname: 'd3iy3ktsgwux5n.cloudfront.net',
+                port: '',
+                pathname: '/**',
+            },
             {
                 protocol: 'http',
                 hostname: 'minio.tienhoangdev.com',
@@ -16,7 +23,6 @@ const nextConfig: NextConfig = {
                 pathname: '/**',
             },
             {
-                // Add localhost for development
                 protocol: 'http',
                 hostname: 'localhost',
                 port: '*',
@@ -25,7 +31,7 @@ const nextConfig: NextConfig = {
             {
                 // For placeholder images if needed
                 protocol: 'https',
-                hostname: 'placehold.co',
+                hostname: 'placeholder.co',
                 port: '',
                 pathname: '/**',
             }
