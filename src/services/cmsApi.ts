@@ -51,7 +51,6 @@ export interface Article {
     tags: string[];
     publishedAt: string;
     cover?: Media;
-    mediaAssets?: Media[];
     MDContent?: string;
 }
 
@@ -125,7 +124,6 @@ export interface ArticleDetailResponse {
 export async function getArticleById(documentId: string): Promise<Article> {
     const params = new URLSearchParams();
     params.append('populate[0]', 'cover');
-    params.append('populate[1]', 'mediaAssets');
 
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_CMS_API_HOST}/api/articles/${documentId}?${params.toString()}`
