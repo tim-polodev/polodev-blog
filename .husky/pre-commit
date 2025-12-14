@@ -1,1 +1,2 @@
-npm audit
+semgrep scan --config auto
+npm run lint
