@@ -140,7 +140,7 @@ export const ArticleContent = ({article}: { article: Article }) => {
                     <Image width={40}
                            height={40}
                            className="w-12 h-12 rounded-full mr-4"
-                           src="https://d3iy3ktsgwux5n.cloudfront.net/production/small_polodev_logo_1257b80627.jpg"
+                           src={"/polodev-logo.jpg"}
                            alt={AUTHOR_NAME}/>
                     <div>
                         <p className="font-semibold text-gray-800">{AUTHOR_NAME}</p>
