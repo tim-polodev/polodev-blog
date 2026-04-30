@@ -25,7 +25,7 @@ export default function ArticlePage() {
     }, [id]);
 
     return (
-        <div data-color-mode="light">
+        <div className="min-h-screen bg-white dark:bg-gray-950">
             {article &&
                 <ArticleContent article={article}/>
             }

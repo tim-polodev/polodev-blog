@@ -68,7 +68,7 @@ const CodeBlock = ({children, className, ...props}: React.HTMLAttributes<HTMLEle
 
     return (
         <div
-            className="relative group my-4 cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-blue-500/30 rounded-lg overflow-hidden bg-[#2d2d2d]"
+            className="relative group my-4 w-full p-2 cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-blue-500/30 rounded-lg overflow-hidden bg-[#2d2d2d]"
             onClick={handleCopy}
             title="Click to copy"
         >
@@ -84,9 +84,9 @@ const CodeBlock = ({children, className, ...props}: React.HTMLAttributes<HTMLEle
                     Copied!
                 </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto w-full">
                 <code
-                    className={`${className} block p-4 transition-colors duration-200 group-hover:bg-gray-800/90 !bg-transparent`}
+                    className={`${className} block p-4 text-sm sm:text-base transition-colors duration-200 group-hover:bg-gray-800/90 !bg-transparent min-w-full w-max`}
                     style={{whiteSpace: 'pre'}}
                     {...props}>
                     {children}
@@ -98,7 +98,7 @@ const CodeBlock = ({children, className, ...props}: React.HTMLAttributes<HTMLEle
 
 const PreBlock = ({children, ...props}: React.HTMLAttributes<HTMLPreElement> & ExtraProps) => {
     return (
-        <pre className="p-0 !bg-transparent !m-0" {...props}>
+        <pre className="w-full !p-0 !bg-transparent !m-0" {...props}>
             {children}
         </pre>
     );
@@ -132,25 +132,30 @@ export const ArticleContent = ({article}: { article: Article }) => {
     }, [article.MDContent]);
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full">
             <CustomNavbar/>
-            <main className="container mx-auto px-2 py-8 pt-28">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">{article.title}</h1>
-                <div className="flex items-center mb-8 text-gray-500">
+            <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 pt-28">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 leading-tight">{article.title}</h1>
+                <div className="flex items-center mb-8 text-gray-500 dark:text-gray-400">
                     <Image width={40}
                            height={40}
-                           className="w-12 h-12 rounded-full mr-4"
+                           className="w-10 h-10 sm:w-12 sm:h-12 rounded-full mr-3 sm:mr-4 shrink-0"
                            src={"/polodev-logo.jpg"}
                            alt={AUTHOR_NAME}/>
                     <div>
-                        <p className="font-semibold text-gray-800">{AUTHOR_NAME}</p>
-                        <p>{formatDate(article.publishedAt)}</p>
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">{AUTHOR_NAME}</p>
+                        <p className="text-sm">{formatDate(article.publishedAt)}</p>
                     </div>
                 </div>
 
                 <TableOfContents toc={toc}/>
 
-                <article className="prose prose-lg max-w-none">
+                <article className="prose prose-base sm:prose-lg max-w-none dark:prose-invert
+                    prose-pre:!m-0 prose-pre:!p-0 prose-pre:!bg-transparent prose-pre:overflow-x-auto
+                    prose-code:break-words
+                    prose-img:rounded-lg prose-img:w-full
+                    prose-headings:leading-tight
+                    prose-table:block prose-table:overflow-x-auto">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw, rehypeSlug, [rehypePrism, {ignoreMissing: true}]]}

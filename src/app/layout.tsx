@@ -3,6 +3,7 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import "prismjs/themes/prism-tomorrow.css";
 import {GoogleTagManager} from '@next/third-parties/google';
+import {ThemeProvider} from "@/components/ThemeProvider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -25,11 +26,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        {children}
+        <ThemeProvider>
+            {children}
+        </ThemeProvider>
         {process.env.NEXT_PUBLIC_GTM_ID && (
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID}/>
         )}
