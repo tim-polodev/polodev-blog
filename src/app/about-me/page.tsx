@@ -34,8 +34,8 @@ export default function AboutMe() {
                         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">Hoàng Thành Tiến</h1>
                         <p className="text-xl text-gray-500 dark:text-gray-400 mb-4">Tim / Polodev</p>
                         <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-1">Software Engineer / DevSecOps</p>
-                        <p className="text-gray-500 dark:text-gray-400 mb-4 flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" className="w-5 h-5 shrink-0"
+                        <p className="text-gray-500 dark:text-gray-400 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" className="w-5 h-5 shrink-0 mx-auto sm:mx-0"
                                  aria-label="Accenture">
                                 <defs>
                                     <linearGradient id="accenture-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
