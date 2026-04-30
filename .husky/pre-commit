@@ -1,2 +1,3 @@
 semgrep scan --config auto
+gitleaks protect --staged --verbose
 npm run lint
