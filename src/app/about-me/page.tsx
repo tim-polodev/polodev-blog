@@ -33,9 +33,11 @@ export default function AboutMe() {
                     <div className="text-center">
                         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">Hoàng Thành Tiến</h1>
                         <p className="text-xl text-gray-500 dark:text-gray-400 mb-4">Tim / Polodev</p>
-                        <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-1">Software Engineer / DevSecOps</p>
+                        <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-1">Software Engineer /
+                            DevSecOps</p>
                         <p className="text-gray-500 dark:text-gray-400 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" className="w-5 h-5 shrink-0 mx-auto sm:mx-0"
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"
+                                 className="w-5 h-5 shrink-0 mx-auto sm:mx-0"
                                  aria-label="Accenture">
                                 <defs>
                                     <linearGradient id="accenture-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -54,7 +56,7 @@ export default function AboutMe() {
                                className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                 ✉️ hoangthanhtien0604@gmail.com
                             </a>
-                            <a href="https://www.linkedin.com/in/hoangthanhtien/"
+                            <a href="https://www.linkedin.com/in/hoangthanhtien"
                                target="_blank"
                                rel="noopener noreferrer"
                                className="flex items-center gap-1 hover:text-[#0077B5] transition-colors">
@@ -78,7 +80,8 @@ export default function AboutMe() {
                             of end users in Indonesia, processing billions of requests per month with very low latency.
                         </p>
                         <div>
-                            <p className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Core Technical Arsenal</p>
+                            <p className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Core Technical
+                                Arsenal</p>
                             <ul className="space-y-1 text-gray-700 dark:text-gray-300 list-disc list-inside">
                                 <li><span className="font-medium">Specializations:</span> Video/Audio Streaming,
                                     OpenRTB, Ad-Serving Platforms, High-Availability Systems
@@ -114,9 +117,12 @@ export default function AboutMe() {
                                             <polygon points="10,5 35,25 10,45 18,45 43,25 18,5" fill="url(#acc-tl)"/>
                                         </svg>
                                     </div>
-                                    <p className="font-bold text-gray-900 dark:text-white">Full Stack Engineering Assoc Manager</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Accenture · Full-time</p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">May 2024 – Present · Jakarta, Indonesia ·
+                                    <p className="font-bold text-gray-900 dark:text-white">Full Stack Engineering Assoc
+                                        Manager</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Accenture ·
+                                        Full-time</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">May 2024 – Present ·
+                                        Jakarta, Indonesia ·
                                         Hybrid</p>
                                 </div>
 
@@ -127,8 +133,10 @@ export default function AboutMe() {
                                         <span className="text-xs font-bold text-gray-500 dark:text-gray-300">JX</span>
                                     </div>
                                     <p className="font-bold text-gray-900 dark:text-white">Head of Media</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Jixie · Full-time</p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500">Aug 2023 – May 2024 · 10 mos · Hanoi, Vietnam ·
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Jixie ·
+                                        Full-time</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500">Aug 2023 – May 2024 · 10 mos
+                                        · Hanoi, Vietnam ·
                                         Remote</p>
                                 </div>
 
@@ -140,15 +148,20 @@ export default function AboutMe() {
                                     </div>
                                     <p className="font-bold text-gray-900 dark:text-white">VMO Group</p>
 
-                                    <div className="mt-3 space-y-4 border-l-2 border-gray-100 dark:border-gray-700 pl-4 ml-1">
+                                    <div
+                                        className="mt-3 space-y-4 border-l-2 border-gray-100 dark:border-gray-700 pl-4 ml-1">
                                         <div>
-                                            <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Technical Team Lead</p>
-                                            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Apr 2023 – Aug 2023 · 5 mos ·
+                                            <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Technical
+                                                Team Lead</p>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Apr 2023 – Aug
+                                                2023 · 5 mos ·
                                                 Hanoi, Vietnam · On-site</p>
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Full-stack Developer</p>
-                                            <p className="text-xs text-gray-400 dark:text-gray-500">Sep 2021 – Apr 2023 · 1 yr 8 mos ·
+                                            <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Full-stack
+                                                Developer</p>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500">Sep 2021 – Apr 2023
+                                                · 1 yr 8 mos ·
                                                 Hanoi, Vietnam</p>
                                         </div>
                                     </div>
@@ -161,8 +174,10 @@ export default function AboutMe() {
                                         <span className="text-xs font-bold text-gray-500 dark:text-gray-300">GS</span>
                                     </div>
                                     <p className="font-bold text-gray-900 dark:text-white">Back End Developer</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Gonstack · Full-time</p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500">Feb 2019 – Sep 2021 · 2 yrs 8 mos · Hanoi,
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Gonstack ·
+                                        Full-time</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500">Feb 2019 – Sep 2021 · 2 yrs
+                                        8 mos · Hanoi,
                                         Vietnam · On-site</p>
                                 </div>
 
@@ -174,14 +189,17 @@ export default function AboutMe() {
                     <section>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b dark:border-gray-700 pb-2">Education</h2>
                         <div className="flex flex-col">
-                            <p className="font-semibold text-gray-800 dark:text-gray-200">Academy of Cryptography Techniques</p>
-                            <p className="text-gray-600 dark:text-gray-400">Information Technology: Embedded and Mobile Development</p>
+                            <p className="font-semibold text-gray-800 dark:text-gray-200">Academy of Cryptography
+                                Techniques</p>
+                            <p className="text-gray-600 dark:text-gray-400">Information Technology: Embedded and Mobile
+                                Development</p>
                         </div>
                     </section>
 
                     {/* Certifications */}
                     <section>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b dark:border-gray-700 pb-2">Licenses &
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b dark:border-gray-700 pb-2">Licenses
+                            &
                             Certifications</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                             {certifications.map((cert) => (
@@ -200,11 +218,13 @@ export default function AboutMe() {
 
                     {/* Honors & Awards */}
                     <section>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b dark:border-gray-700 pb-2">Honors & Awards</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b dark:border-gray-700 pb-2">Honors
+                            & Awards</h2>
                         <div className="flex items-start gap-4">
                             <div className="text-2xl">🏆</div>
                             <div>
-                                <p className="font-semibold text-gray-800 dark:text-gray-200">VMO C11 Shinning Star Award</p>
+                                <p className="font-semibold text-gray-800 dark:text-gray-200">VMO C11 Shinning Star
+                                    Award</p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">January 2023</p>
                             </div>
                         </div>
