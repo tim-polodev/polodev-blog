@@ -60,7 +60,8 @@ const CodeBlock = ({children, className, ...props}: React.HTMLAttributes<HTMLEle
 
     if (!match) {
         return (
-            <code className={className} {...props}>
+            <code
+                className={`${className} bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono before:content-none after:content-none`} {...props}>
                 {children}
             </code>
         );
@@ -152,6 +153,7 @@ export const ArticleContent = ({article}: { article: Article }) => {
 
                 <article className="prose prose-base sm:prose-lg max-w-none dark:prose-invert
                     prose-pre:!m-0 prose-pre:!p-0 prose-pre:!bg-transparent prose-pre:overflow-x-auto
+                    prose-code:before:content-none prose-code:after:content-none
                     prose-code:break-words
                     prose-img:rounded-lg prose-img:w-full
                     prose-headings:leading-tight
