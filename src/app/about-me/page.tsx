@@ -4,6 +4,10 @@ import {CustomNavbar} from "@/components/CustomNavbar";
 
 const certifications = [
     {
+        title: "Reinvention with Agentic AI",
+        badgeId: "26c30a0c-9500-4731-b2d5-aeff36b4c346",
+    },
+    {
         title: "Generative AI Leader Certification",
         badgeId: "dbbb93d8-b47e-4aee-a1a3-b1fca1fea690",
     },

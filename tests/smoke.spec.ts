@@ -18,3 +18,15 @@ test('navigation to about-me works', async ({ page }) => {
     await expect(page).toHaveURL(/\/about-me/);
   }
 });
+
+test('about-me page displays Reinvention with Agentic AI badge', async ({ page }) => {
+  await page.goto('/about-me');
+  
+  // Verify the title is on the page
+  const certTitle = page.getByText('Reinvention with Agentic AI');
+  await expect(certTitle).toBeVisible();
+
+  // Verify the badge container exists
+  const badgeContainer = page.locator('div[data-share-badge-id="26c30a0c-9500-4731-b2d5-aeff36b4c346"]');
+  await expect(badgeContainer).toBeAttached();
+});
