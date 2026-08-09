@@ -23,6 +23,10 @@ const certifications = [
         title: "AWS Solutions Architect Associate",
         badgeId: "66c140c3-c105-4b91-be83-ba77743e8831",
     },
+    {
+        title: "Kubernetes and Cloud Native Associate",
+        badgeId: "35744b06-60e7-4a56-a5a0-d99bc908d9fe",
+    },
 ];
 
 export default function AboutMe() {
