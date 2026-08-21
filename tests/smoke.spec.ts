@@ -41,6 +41,7 @@ test('all certification badges are present on about-me page', async ({ page }) =
     { title: 'Professional Machine Learning Engineer', badgeId: '3b6b6aa5-5425-42f1-a804-c2e4c6061fcc' },
     { title: 'AWS Solutions Architect Associate', badgeId: '66c140c3-c105-4b91-be83-ba77743e8831' },
     { title: 'Kubernetes and Cloud Native Associate', badgeId: '35744b06-60e7-4a56-a5a0-d99bc908d9fe' },
+    { title: 'Kubernetes and Cloud Native Security Associate', badgeId: 'e23000ff-ccad-4d24-9330-1101703b737e' },
   ];
 
   for (const cert of certifications) {
@@ -51,3 +52,25 @@ test('all certification badges are present on about-me page', async ({ page }) =
     await expect(badge).toBeAttached();
   }
 });
+
+test('about-me page displays VMO C11 Shining Star award image on hover', async ({ page }) => {
+  await page.goto('/about-me');
+
+  const awardTitle = page.getByText('VMO C11 Shining Star Award');
+  await expect(awardTitle).toBeVisible();
+
+  const awardImage = page.getByAltText('VMO C11 Shining Star Award');
+
+  // Initially not visible before hover
+  await expect(awardImage).not.toBeVisible();
+
+  // Hover over the title to display fullsize preview
+  await awardTitle.hover();
+  await expect(awardImage).toBeVisible();
+
+  // Move mouse away to hide preview
+  await page.mouse.move(0, 0);
+  await expect(awardImage).not.toBeVisible();
+});
+
+

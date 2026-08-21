@@ -1,4 +1,6 @@
 "use client";
+import React, {useState} from "react";
+import Image from "next/image";
 import Script from "next/script";
 import {CustomNavbar} from "@/components/CustomNavbar";
 
@@ -27,9 +29,15 @@ const certifications = [
         title: "Kubernetes and Cloud Native Associate",
         badgeId: "35744b06-60e7-4a56-a5a0-d99bc908d9fe",
     },
+    {
+        title: "Kubernetes and Cloud Native Security Associate",
+        badgeId: "e23000ff-ccad-4d24-9330-1101703b737e",
+    },
 ];
 
 export default function AboutMe() {
+    const [showAwardImage, setShowAwardImage] = useState(false);
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             <CustomNavbar/>
@@ -229,17 +237,51 @@ export default function AboutMe() {
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b dark:border-gray-700 pb-2">Honors
                             & Awards</h2>
                         <div className="flex items-start gap-4">
-                            <div className="text-2xl">🏆</div>
+                            <div className="text-2xl shrink-0">🏆</div>
                             <div>
-                                <p className="font-semibold text-gray-800 dark:text-gray-200">VMO C11 Shinning Star
-                                    Award</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">January 2023</p>
+                                <div
+                                    className="cursor-pointer inline-block"
+                                    onMouseEnter={() => setShowAwardImage(true)}
+                                    onMouseLeave={() => setShowAwardImage(false)}
+                                    onFocus={() => setShowAwardImage(true)}
+                                    onBlur={() => setShowAwardImage(false)}
+                                    tabIndex={0}
+                                    role="button"
+                                    aria-label="VMO C11 Shining Star Award"
+                                >
+                                    <p className="font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                                        VMO C11 Shining Star Award
+                                    </p>
+                                </div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">January 2023</p>
                             </div>
                         </div>
                     </section>
 
                 </div>
             </main>
+
+            {/* Fullsize Centered Image Preview on Hover */}
+            {showAwardImage && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs pointer-events-none transition-opacity duration-200 animate-in fade-in"
+                    aria-hidden="true"
+                >
+                    <div className="relative max-w-lg max-h-[85vh] bg-white dark:bg-gray-900 p-3 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden flex flex-col items-center">
+                        <Image
+                            src="/vmo-c11-shining-star.jpeg"
+                            alt="VMO C11 Shining Star Award"
+                            width={768}
+                            height={1024}
+                            className="max-h-[75vh] w-auto h-auto object-contain rounded-xl"
+                            priority
+                        />
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2 text-center">
+                            VMO C11 Shining Star Award · January 2023
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
