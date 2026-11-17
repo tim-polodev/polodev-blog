@@ -1,3 +1,4 @@
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 npm run test:e2e
 npm audit
 semgrep scan --config auto

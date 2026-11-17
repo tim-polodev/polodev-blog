@@ -1,4 +1,4 @@
-FROM node:23-alpine AS base
+FROM node:24.22.3-alpine AS base
 # If issues persist with native modules, you might need build tools.
 # RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 
-FROM node:23-alpine AS production
+FROM node:24.22.3-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 

@@ -1,7 +1,55 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+
+const MOCK_ARTICLE = {
+  id: 1,
+  documentId: 'mock-article-1',
+  title: 'Kubernetes Homelab Guide',
+  description: 'Setting up a resilient Kubernetes cluster at home.',
+  tags: ['kubernetes', 'devops'],
+  publishedAt: '2026-08-01T00:00:00.000Z',
+  cover: {
+    url: '/polodev-logo.jpg',
+    alternativeText: 'Polodev Cover',
+  },
+  MDContent: '# Heading\n\n```ts\nconsole.log("hello polodev");\n```\n',
+};
+
+async function mockArticlesFallback(page: Page) {
+  await page.route('**/api/articles**', async (route) => {
+    const url = new URL(route.request().url());
+    const isDetail = /\/api\/articles\/[^/]+$/.test(url.pathname);
+    try {
+      const response = await route.fetch({ timeout: 2000 });
+      if (response.ok()) {
+        const body = await response.json();
+        const hasData = isDetail ? Boolean(body?.data) : Array.isArray(body?.data) && body.data.length > 0;
+        if (hasData) {
+          await route.fulfill({ response, json: body });
+          return;
+        }
+      }
+    } catch {
+      // CMS is not running locally; serve deterministic fixture data.
+    }
+
+    if (isDetail) {
+      await route.fulfill({ json: { data: MOCK_ARTICLE, meta: {} } });
+      return;
+    }
+
+    const pageNum = url.searchParams.get('pagination[page]') || '1';
+    await route.fulfill({
+      json: {
+        data: pageNum === '1' ? [MOCK_ARTICLE] : [],
+        meta: { pagination: { page: Number(pageNum), pageSize: 10, pageCount: 1, total: 1 } },
+      },
+    });
+  });
+}
 
 test.describe('General UI and Functionality', () => {
   test.beforeEach(async ({ page }) => {
+    await mockArticlesFallback(page);
     await page.goto('/');
   });
 
@@ -48,6 +96,7 @@ test.describe('General UI and Functionality', () => {
 
 test.describe('Article Page Functionality', () => {
   test.beforeEach(async ({ page }) => {
+    await mockArticlesFallback(page);
     await page.goto('/');
     await page.locator('a[href^="/articles/"]').first().click();
   });
