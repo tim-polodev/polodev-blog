@@ -79,11 +79,11 @@ test.describe('FIRE & Compound Interest Calculator (/tools/fire-calculator)', ()
         const standardPresetButton = page.getByRole('button', { name: /Standard FIRE/i });
         await expect(standardPresetButton).toBeVisible();
         await expect(standardPresetButton).toHaveText(/Standard FIRE/);
-        await expect(standardPresetButton).toHaveAttribute('title', 'Target 25x annual expenses at 8% return');
+        await expect(standardPresetButton).toHaveAttribute('title', 'Steady 3.5% salary growth & 2.5% expense inflation');
 
         // Hover over Standard FIRE button
         await standardPresetButton.hover();
-        const standardTooltip = page.locator('[role="tooltip"]').filter({ hasText: 'Target 25x annual expenses at 8% return' });
+        const standardTooltip = page.locator('[role="tooltip"]').filter({ hasText: 'Steady 3.5% salary growth & 2.5% expense inflation' });
         await expect(standardTooltip).toBeVisible();
 
         // Hover over Coast FIRE button
@@ -93,6 +93,65 @@ test.describe('FIRE & Compound Interest Calculator (/tools/fire-calculator)', ()
         await coastPresetButton.hover();
         const coastTooltip = page.locator('[role="tooltip"]').filter({ hasText: 'Front-load capital early & let compound interest grow' });
         await expect(coastTooltip).toBeVisible();
+    });
+
+    test('advanced settings toggle displays monthly income, growth rates, and dynamic savings rate', async ({ page }) => {
+        const advancedToggle = page.getByRole('button', { name: /Show Advanced Settings/i });
+        await expect(advancedToggle).toBeVisible();
+        await advancedToggle.click();
+
+        // Switch to Income & Growth tab
+        const incomeTab = page.getByRole('button', { name: /Income & Growth/i });
+        await expect(incomeTab).toBeVisible();
+        await incomeTab.click();
+
+        const monthlyIncomeInput = page.locator('#monthly-income');
+        const incomeGrowthInput = page.locator('#income-growth-rate');
+        await expect(monthlyIncomeInput).toBeVisible();
+        await expect(incomeGrowthInput).toBeVisible();
+
+        // Switch to Expense Inflation tab and verify
+        const expenseTab = page.getByRole('button', { name: /Expense Inflation/i });
+        await expect(expenseTab).toBeVisible();
+        await expenseTab.click();
+        const expenseGrowthInput = page.locator('#expense-growth-rate');
+        await expect(expenseGrowthInput).toBeVisible();
+
+        // Switch back to Income & Growth tab
+        await incomeTab.click();
+
+        // Fill Monthly Income with 50,000,000 and Monthly Contribution with 25,000,000
+        await monthlyIncomeInput.fill('50000000');
+        const monthlyContribInput = page.locator('#monthly-contribution');
+        await monthlyContribInput.fill('25000000');
+
+        // Verify Savings Rate badge shows 50.0%
+        await expect(page.getByText('Savings Rate: 50.0%')).toBeVisible();
+        await expect(page.getByText('Net Monthly Flow:')).toBeVisible();
+    });
+
+    test('enables multi-stage life segments and custom age brackets with decreasing expenses', async ({ page }) => {
+        const advancedToggle = page.getByRole('button', { name: /Show Advanced Settings/i });
+        await advancedToggle.click();
+
+        // Enable custom segments toggle
+        await page.locator('label[for="use-custom-segments-toggle"]').click();
+        await expect(page.getByRole('button', { name: /Family & Empty Nest/i })).toBeVisible();
+
+        // Click Family & Empty Nest template
+        await page.getByRole('button', { name: /Family & Empty Nest/i }).click();
+
+        // Verify contextual indicator for decreasing expenses in empty nest
+        await expect(page.getByText(/Expenses decrease by/i).first()).toBeVisible();
+
+        // Add a new custom stage segment
+        const addStageBtn = page.getByRole('button', { name: /Add Custom Life Stage Segment/i });
+        await addStageBtn.click();
+
+        // Switch to Amortization Schedule tab and verify segment names appear in table
+        const scheduleTab = page.getByRole('button', { name: /Amortization Schedule/i });
+        await scheduleTab.click();
+        await expect(page.getByText(/Early Career & Single/i).first()).toBeVisible();
     });
 
     test('tab navigation switches between Chart, Amortization Schedule, Milestones, and Guide', async ({ page }) => {
@@ -105,6 +164,10 @@ test.describe('FIRE & Compound Interest Calculator (/tools/fire-calculator)', ()
         await scheduleTab.click();
         await expect(page.getByRole('heading', { name: /Amortization Schedule/i })).toBeVisible();
         await expect(page.locator('table')).toBeVisible();
+
+        // Check new columns in table
+        await expect(page.getByRole('columnheader', { name: /Income \(Mo\)/i })).toBeVisible();
+        await expect(page.getByRole('columnheader', { name: /Expenses \(Mo\)/i })).toBeVisible();
 
         // Switch to Milestones Tab
         const milestonesTab = page.getByRole('button', { name: /Milestones/i });

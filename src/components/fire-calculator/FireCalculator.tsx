@@ -16,10 +16,13 @@ import { FireMilestones } from './FireMilestones';
 const DEFAULT_PARAMS_VND: CalculationParams = {
     initialInvestment: 100_000_000,
     monthlyContribution: 15_000_000,
+    monthlyIncome: 35_000_000,
+    annualIncomeGrowthRate: 3.5,
     annualReturnRate: 8.0,
     investmentHorizonYears: 20,
     currentAge: 28,
     annualExpenses: 240_000_000,
+    annualExpenseGrowthRate: 2.5,
     safeWithdrawalRate: 4.0,
     inflationRate: 3.5,
     adjustForInflation: false,

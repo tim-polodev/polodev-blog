@@ -25,6 +25,11 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
         const headers = [
             'Year',
             'Age',
+            'Life Stage',
+            'Monthly Income',
+            'Annual Income',
+            'Monthly Expenses',
+            'Annual Expenses',
             'Start Balance',
             'Annual Contribution',
             'Total Contributed',
@@ -32,11 +37,18 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
             'Total Interest Earned',
             'End Balance (Nominal)',
             'End Balance (Real / Inflation Adjusted)',
+            'FIRE Target (Year)',
+            'Savings Rate (%)',
         ];
 
         const rows = data.map((d) => [
             d.year,
             d.age,
+            `"${d.segmentName || ''}"`,
+            (d.monthlyIncome || 0).toFixed(2),
+            (d.annualIncome || 0).toFixed(2),
+            (d.monthlyExpenses || 0).toFixed(2),
+            (d.annualExpenses || 0).toFixed(2),
             d.startBalance.toFixed(2),
             d.annualContribution.toFixed(2),
             d.totalContributed.toFixed(2),
@@ -44,6 +56,8 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
             d.totalInterestEarned.toFixed(2),
             d.endBalance.toFixed(2),
             d.realEndBalance.toFixed(2),
+            (d.fireTargetYear || fireNumber).toFixed(2),
+            (d.savingsRateYear || 0).toFixed(1),
         ]);
 
         const csvContent =
@@ -84,7 +98,7 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
                         <span>Annual Amortization Schedule</span>
                     </h3>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Year-by-year detailed breakdown of compounding balance and contributions
+                        Year-by-year detailed breakdown of compounding balance, dynamic income, and expenses
                     </p>
                 </div>
 
@@ -113,7 +127,8 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
                         <tr>
                             <th className="py-3 px-3.5">Year</th>
                             <th className="py-3 px-3">Age</th>
-                            <th className="py-3 px-3">Start Balance</th>
+                            <th className="py-3 px-3">Income (Mo)</th>
+                            <th className="py-3 px-3">Expenses (Mo)</th>
                             <th className="py-3 px-3">Annual Deposit</th>
                             <th className="py-3 px-3 text-emerald-600 dark:text-emerald-400">Interest (Yr)</th>
                             <th className="py-3 px-3">Total Invested</th>
@@ -124,13 +139,14 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-gray-800/60 font-mono">
                         {displayedData.map((row) => {
+                            const currentTarget = row.fireTargetYear > 0 ? row.fireTargetYear : fireNumber;
                             const isFireYear =
-                                fireNumber > 0 &&
-                                (adjustForInflation ? row.realEndBalance : row.endBalance) >= fireNumber &&
+                                currentTarget > 0 &&
+                                (adjustForInflation ? row.realEndBalance : row.endBalance) >= currentTarget &&
                                 (row.year === 1 ||
                                     (adjustForInflation
-                                        ? (data[row.year - 2]?.realEndBalance ?? 0) < fireNumber
-                                        : (data[row.year - 2]?.endBalance ?? 0) < fireNumber));
+                                        ? (data[row.year - 2]?.realEndBalance ?? 0) < (data[row.year - 2]?.fireTargetYear ?? fireNumber)
+                                        : (data[row.year - 2]?.endBalance ?? 0) < (data[row.year - 2]?.fireTargetYear ?? fireNumber)));
 
                             return (
                                 <tr
@@ -141,8 +157,13 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
                                             : ''
                                     }`}
                                 >
-                                    <td className="py-2.5 px-3.5 font-sans font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
+                                    <td className="py-2.5 px-3.5 font-sans font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 flex-wrap">
                                         <span>Yr {row.year}</span>
+                                        {row.segmentName && (
+                                            <span className="text-[10px] bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-1.5 py-0.5 rounded-md font-sans">
+                                                {row.segmentName}
+                                            </span>
+                                        )}
                                         {isFireYear && (
                                             <span className="text-[10px] bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded-full font-bold">
                                                 FIRE 🎯
@@ -152,8 +173,11 @@ export const YearlyBreakdownTable: React.FC<YearlyBreakdownTableProps> = ({
                                     <td className="py-2.5 px-3 font-sans text-gray-500 dark:text-gray-400">
                                         {row.age}
                                     </td>
-                                    <td className="py-2.5 px-3 text-gray-600 dark:text-gray-300">
-                                        {formatCurrency(row.startBalance, currency)}
+                                    <td className="py-2.5 px-3 text-blue-600 dark:text-blue-400">
+                                        {formatCurrency(row.monthlyIncome || 0, currency, true)}
+                                    </td>
+                                    <td className="py-2.5 px-3 text-gray-600 dark:text-gray-400">
+                                        {formatCurrency(row.monthlyExpenses || 0, currency, true)}
                                     </td>
                                     <td className="py-2.5 px-3 text-blue-600 dark:text-blue-400 font-medium">
                                         +{formatCurrency(row.annualContribution, currency)}

@@ -57,8 +57,8 @@ export const GrowthChart: React.FC<GrowthChartProps> = ({
     );
     const maxY = Math.max(maxDataValue * 1.1, fireNumber * 1.15, 10000);
 
-    const getX = (index: number) => padding.left + (index / (points.length - 1)) * chartWidth;
-    const getY = (val: number) => padding.top + chartHeight - (val / maxY) * chartHeight;
+    const getX = (index: number) => Math.round((padding.left + (index / (points.length - 1)) * chartWidth) * 100) / 100;
+    const getY = (val: number) => Math.round((padding.top + chartHeight - (val / maxY) * chartHeight) * 100) / 100;
 
     // Generate Path for Total Balance (Top curve)
     const balanceCoords = points.map((p, i) => {

@@ -4,6 +4,9 @@ import {
     calculateCompoundInterest,
     calculateFireMetrics,
     CalculationParams,
+    LifeStageSegment,
+    getDefaultSegmentsVND,
+    getDefaultSegmentsUSD,
 } from '@/utils/calculator';
 
 test.describe('Calculator Unit Tests - formatCurrency', () => {
@@ -272,5 +275,242 @@ test.describe('Calculator Unit Tests - calculateFireMetrics', () => {
             'fat_fire',
         ]);
         expect(metrics.fireNumber).toBe(1_200_000); // 48,000 / 0.04
+    });
+});
+
+test.describe('Calculator Unit Tests - Dynamic Income and Expense Growth', () => {
+    const dynamicParams: CalculationParams = {
+        initialInvestment: 100_000_000,
+        monthlyContribution: 15_000_000,
+        monthlyIncome: 35_000_000,
+        annualIncomeGrowthRate: 5.0, // 5% income raises per year
+        annualExpenses: 240_000_000,
+        annualExpenseGrowthRate: 3.0, // 3% expense inflation per year
+        annualReturnRate: 8.0,
+        investmentHorizonYears: 5,
+        currentAge: 28,
+        safeWithdrawalRate: 4.0,
+        inflationRate: 3.5,
+        adjustForInflation: false,
+        compoundingFrequency: 'monthly',
+    };
+
+    test('calculates escalating monthly and annual income with annualIncomeGrowthRate', () => {
+        const schedule = calculateCompoundInterest(dynamicParams);
+        expect(schedule).toHaveLength(5);
+
+        // Year 1: Base income (35M/mo, 420M/yr)
+        expect(schedule[0].monthlyIncome).toBe(35_000_000);
+        expect(schedule[0].annualIncome).toBe(420_000_000);
+
+        // Year 2: 35M * 1.05 = 36.75M/mo, 441M/yr
+        expect(schedule[1].monthlyIncome).toBeCloseTo(36_750_000, 0);
+        expect(schedule[1].annualIncome).toBeCloseTo(441_000_000, 0);
+
+        // Year 5: 35M * (1.05)^4 = 42,542,618.75
+        const expectedYear5Monthly = 35_000_000 * Math.pow(1.05, 4);
+        expect(schedule[4].monthlyIncome).toBeCloseTo(expectedYear5Monthly, 0);
+        expect(schedule[4].annualIncome).toBeCloseTo(expectedYear5Monthly * 12, 0);
+    });
+
+    test('escalates monthly and annual contributions proportionally with income growth', () => {
+        const schedule = calculateCompoundInterest(dynamicParams);
+
+        // Year 1: 15M * 12 = 180M
+        expect(schedule[0].annualContribution).toBe(180_000_000);
+
+        // Year 2: 15M * 1.05 * 12 = 189M
+        expect(schedule[1].annualContribution).toBeCloseTo(189_000_000, 0);
+
+        // Total contributed over 5 years must exceed static 5 * 180M (900M)
+        expect(schedule[4].totalContributed).toBeGreaterThan(900_000_000);
+    });
+
+    test('calculates escalating annual expenses with annualExpenseGrowthRate', () => {
+        const schedule = calculateCompoundInterest(dynamicParams);
+
+        // Year 1: 240M/yr, 20M/mo
+        expect(schedule[0].annualExpenses).toBe(240_000_000);
+        expect(schedule[0].monthlyExpenses).toBe(20_000_000);
+
+        // Year 2: 240M * 1.03 = 247.2M/yr, 20.6M/mo
+        expect(schedule[1].annualExpenses).toBeCloseTo(247_200_000, 0);
+        expect(schedule[1].monthlyExpenses).toBeCloseTo(20_600_000, 0);
+
+        // Year 5: 240M * (1.03)^4
+        const expectedYear5Expenses = 240_000_000 * Math.pow(1.03, 4);
+        expect(schedule[4].annualExpenses).toBeCloseTo(expectedYear5Expenses, 0);
+    });
+
+    test('calculates dynamic FIRE target for each year matching expense escalation', () => {
+        const schedule = calculateCompoundInterest(dynamicParams);
+
+        // Year 1: 240M / 0.04 = 6B
+        expect(schedule[0].fireTargetYear).toBe(6_000_000_000);
+
+        // Year 2: 247.2M / 0.04 = 6.18B
+        expect(schedule[1].fireTargetYear).toBeCloseTo(6_180_000_000, 0);
+
+        // Year 5: Year 5 Expenses / 0.04
+        const expectedYear5Fire = (240_000_000 * Math.pow(1.03, 4)) / 0.04;
+        expect(schedule[4].fireTargetYear).toBeCloseTo(expectedYear5Fire, 0);
+    });
+
+    test('calculates correct savings rate for each year', () => {
+        const schedule = calculateCompoundInterest(dynamicParams);
+
+        // (15M / 35M) * 100 = 42.857...%
+        expect(schedule[0].savingsRateYear).toBeCloseTo((15 / 35) * 100, 1);
+        expect(schedule[4].savingsRateYear).toBeCloseTo((15 / 35) * 100, 1);
+    });
+
+    test('maintains 100% backward compatibility when growth rates are 0 or omitted', () => {
+        const staticParams: CalculationParams = {
+            initialInvestment: 50_000_000,
+            monthlyContribution: 5_000_000,
+            annualReturnRate: 7.0,
+            investmentHorizonYears: 3,
+            currentAge: 25,
+            annualExpenses: 120_000_000,
+            safeWithdrawalRate: 4.0,
+            inflationRate: 3.0,
+            adjustForInflation: false,
+            compoundingFrequency: 'monthly',
+        };
+
+        const schedule = calculateCompoundInterest(staticParams);
+        expect(schedule).toHaveLength(3);
+
+        // Every year has the exact same annual contribution
+        expect(schedule[0].annualContribution).toBe(60_000_000);
+        expect(schedule[1].annualContribution).toBe(60_000_000);
+        expect(schedule[2].annualContribution).toBe(60_000_000);
+
+        // Static FIRE target = 120M / 0.04 = 3B
+        expect(schedule[0].fireTargetYear).toBe(3_000_000_000);
+        expect(schedule[2].fireTargetYear).toBe(3_000_000_000);
+    });
+
+    test('handles edge cases (zero income, zero expenses, high growth rate)', () => {
+        const edgeParams: CalculationParams = {
+            ...dynamicParams,
+            monthlyIncome: 0,
+            annualExpenses: 0,
+            annualIncomeGrowthRate: 15.0,
+            annualExpenseGrowthRate: 15.0,
+        };
+
+        const schedule = calculateCompoundInterest(edgeParams);
+        expect(schedule[0].savingsRateYear).toBe(0);
+        expect(schedule[0].fireTargetYear).toBe(0);
+        expect(schedule[4].monthlyIncome).toBe(0);
+        expect(schedule[4].annualExpenses).toBe(0);
+    });
+});
+
+test.describe('Calculator Unit Tests - Multi-Stage Life Segments (Decreasing/Increasing Expenses)', () => {
+    const lifeStageSegments: LifeStageSegment[] = [
+        {
+            id: 'stage_1',
+            name: 'Early Career',
+            fromAge: 22,
+            toAge: 30,
+            monthlyIncome: 25_000_000,
+            monthlyExpenses: 15_000_000,
+            monthlyContribution: 10_000_000,
+        },
+        {
+            id: 'stage_2',
+            name: 'Family & Kids (Peak Expenses)',
+            fromAge: 31,
+            toAge: 45,
+            monthlyIncome: 65_000_000,
+            monthlyExpenses: 40_000_000,
+            monthlyContribution: 25_000_000,
+        },
+        {
+            id: 'stage_3',
+            name: 'Empty Nest (Expenses Drop)',
+            fromAge: 46,
+            toAge: 55,
+            monthlyIncome: 90_000_000,
+            monthlyExpenses: 25_000_000, // Expenses drop from 40M to 25M as kids grow up
+            monthlyContribution: 65_000_000,
+        },
+        {
+            id: 'stage_4',
+            name: 'Pre-Retirement',
+            fromAge: 56,
+            toAge: 65,
+            monthlyIncome: 40_000_000,
+            monthlyExpenses: 20_000_000,
+            monthlyContribution: 20_000_000,
+        },
+    ];
+
+    const multiStageParams: CalculationParams = {
+        initialInvestment: 100_000_000,
+        monthlyContribution: 10_000_000,
+        annualExpenses: 180_000_000,
+        annualReturnRate: 8.0,
+        investmentHorizonYears: 35,
+        currentAge: 22,
+        safeWithdrawalRate: 4.0,
+        inflationRate: 3.0,
+        adjustForInflation: false,
+        compoundingFrequency: 'monthly',
+        useCustomSegments: true,
+        segments: lifeStageSegments,
+    };
+
+    test('calculates distinct income, expense, and contribution amounts across multiple age segments', () => {
+        const schedule = calculateCompoundInterest(multiStageParams);
+        expect(schedule).toHaveLength(35);
+
+        // Year 1 (Age 23, in Stage 1): 25M income, 15M expenses, 10M contrib
+        expect(schedule[0].age).toBe(23);
+        expect(schedule[0].monthlyIncome).toBe(25_000_000);
+        expect(schedule[0].monthlyExpenses).toBe(15_000_000);
+        expect(schedule[0].annualExpenses).toBe(180_000_000);
+        expect(schedule[0].annualContribution).toBe(120_000_000);
+        expect(schedule[0].segmentName).toBe('Early Career');
+
+        // Year 10 (Age 32, in Stage 2): 65M income, 40M expenses, 25M contrib
+        expect(schedule[9].age).toBe(32);
+        expect(schedule[9].monthlyIncome).toBe(65_000_000);
+        expect(schedule[9].monthlyExpenses).toBe(40_000_000);
+        expect(schedule[9].annualExpenses).toBe(480_000_000);
+        expect(schedule[9].annualContribution).toBe(300_000_000);
+        expect(schedule[9].segmentName).toBe('Family & Kids (Peak Expenses)');
+
+        // Year 25 (Age 47, in Stage 3 Empty Nest): 90M income, 25M expenses (expenses decreased!), 65M contrib
+        expect(schedule[24].age).toBe(47);
+        expect(schedule[24].monthlyIncome).toBe(90_000_000);
+        expect(schedule[24].monthlyExpenses).toBe(25_000_000);
+        expect(schedule[24].annualExpenses).toBe(300_000_000);
+        expect(schedule[24].annualContribution).toBe(780_000_000);
+        expect(schedule[24].segmentName).toBe('Empty Nest (Expenses Drop)');
+    });
+
+    test('reflects decreased expenses in lower FIRE target milestone during later life stages', () => {
+        const schedule = calculateCompoundInterest(multiStageParams);
+
+        // In Stage 2 (Age 32), FIRE Target = 480M / 0.04 = 12 Billion
+        expect(schedule[9].fireTargetYear).toBe(12_000_000_000);
+
+        // In Stage 3 (Age 47, Empty Nest), FIRE Target drops to 300M / 0.04 = 7.5 Billion
+        expect(schedule[24].fireTargetYear).toBe(7_500_000_000);
+        expect(schedule[24].fireTargetYear).toBeLessThan(schedule[9].fireTargetYear);
+    });
+
+    test('template generators getDefaultSegmentsVND and getDefaultSegmentsUSD return realistic presets', () => {
+        const vndSegments = getDefaultSegmentsVND(25);
+        expect(vndSegments.length).toBeGreaterThanOrEqual(3);
+        // Stage 3 (empty nest) expenses should be lower than Stage 2 (family kids)
+        expect(vndSegments[2].monthlyExpenses).toBeLessThan(vndSegments[1].monthlyExpenses);
+
+        const usdSegments = getDefaultSegmentsUSD(25);
+        expect(usdSegments.length).toBeGreaterThanOrEqual(3);
+        expect(usdSegments[2].monthlyExpenses).toBeLessThan(usdSegments[1].monthlyExpenses);
     });
 });
