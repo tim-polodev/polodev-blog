@@ -10,6 +10,22 @@ const certifications = [
         badgeId: "26c30a0c-9500-4731-b2d5-aeff36b4c346",
     },
     {
+        title: "Certified Partner Specialist Gemini Enterprise Agent Development",
+        badgeId: "766dd33b-7a5d-419b-b6d8-028ec6ce1000",
+    },
+    {
+        title: "Deploy an Agent with Agent Development Kit (ADK)",
+        badgeId: "da525198-9e06-497b-b714-2b3adca0c0b1",
+    },
+    {
+        title: "Evaluate and Improve Agent Development Kit Agents",
+        badgeId: "a3f6ea3a-9bda-4b3d-8527-bff270bba5b2",
+    },
+    {
+        title: "Accelerate Development with Antigravity",
+        badgeId: "ea28463b-dd91-48f5-ab46-bc5d330eec34",
+    },
+    {
         title: "Generative AI Leader Certification",
         badgeId: "dbbb93d8-b47e-4aee-a1a3-b1fca1fea690",
     },
@@ -27,11 +43,23 @@ const certifications = [
     },
     {
         title: "Kubernetes and Cloud Native Associate",
-        badgeId: "35744b06-60e7-4a56-a5a0-d99bc908d9fe",
+        badgeId: "c8d3d61d-aa34-492d-9124-645989352191",
     },
     {
         title: "Kubernetes and Cloud Native Security Associate",
-        badgeId: "e23000ff-ccad-4d24-9330-1101703b737e",
+        badgeId: "cf6d1bd6-e567-4102-9655-1d0871a4c64a",
+    },
+    {
+        title: "Certified Kubernetes Administrator",
+        badgeId: "82f115a3-73f5-4c4e-92a2-ad21dd8cda99",
+    },
+    {
+        title: "Certified Kubernetes Application Developer",
+        badgeId: "21e2ac23-ef0b-49b6-bcd7-fcfca504a930",
+    },
+    {
+        title: "Certified Kubernetes Security Specialist",
+        badgeId: "c11e24ef-dc8a-4f43-b23f-766202fa94f4",
     },
 ];
 
