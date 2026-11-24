@@ -52,11 +52,15 @@ test('all certification badges are present on about-me page', async ({ page }) =
     { title: 'Kubestronaut', badgeId: '226cb096-3ae0-49e9-82e2-a390ba775d9d' },
   ];
 
+  const certsSection = page.locator('section', {
+    has: page.getByRole('heading', { name: 'Licenses & Certifications' }),
+  });
+
   for (const cert of certifications) {
-    const title = page.getByText(cert.title);
+    const title = certsSection.getByText(cert.title, { exact: true });
     await expect(title).toBeVisible();
 
-    const badge = page.locator(`div[data-share-badge-id="${cert.badgeId}"]`);
+    const badge = certsSection.locator(`div[data-share-badge-id="${cert.badgeId}"]`);
     await expect(badge).toBeAttached();
   }
 });
