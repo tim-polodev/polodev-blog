@@ -1,8 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
 import { CustomNavbar } from "@/components/CustomNavbar";
+import { calculateExperienceYears, formatExperienceYears } from "@/utils";
+
+const CAREER_START_YEAR = 2019;
+const CAREER_START_MONTH = 2;
+const DEFAULT_EXPERIENCE_YEARS = 7;
 
 const certifications = [
     {
@@ -69,6 +74,12 @@ const certifications = [
 
 export default function AboutMe() {
     const [showAwardImage, setShowAwardImage] = useState(false);
+    // Keep initial render deterministic across SSR/static prerender and update on mount.
+    const [experienceYears, setExperienceYears] = useState<number>(DEFAULT_EXPERIENCE_YEARS);
+
+    useEffect(() => {
+        setExperienceYears(calculateExperienceYears(CAREER_START_YEAR, CAREER_START_MONTH));
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -122,7 +133,7 @@ export default function AboutMe() {
                     <section>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b dark:border-gray-700 pb-2">About</h2>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                            I am a Software Engineer and Solutions Architect with 7 years of experience building
+                            I am a Software Engineer and Solutions Architect with {formatExperienceYears(experienceYears)} of experience building
                             resilient, high-traffic distributed systems. I specialize in the intersection of Media
                             Streaming and AdTech, where I&apos;ve engineered platforms that serve hundreds of millions
                             of end users in Indonesia, processing billions of requests per month with very low latency.

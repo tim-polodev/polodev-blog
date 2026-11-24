@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { calculateExperienceYears, formatExperienceYears } from '@/utils';
 
 test('has title', async ({ page }) => {
   await page.goto('/');
@@ -83,6 +84,38 @@ test('about-me page displays VMO C11 Shining Star award image on hover', async (
   // Move mouse away to hide preview
   await page.mouse.move(0, 0);
   await expect(awardImage).not.toBeVisible();
+});
+
+test('calculateExperienceYears and formatExperienceYears handle full and half-year boundaries', () => {
+  const cases: Array<[number, number, number, string]> = [
+    [2019, 0, 0, '0 years'],
+    [2019, 1, 0, '0 years'],
+    [2019, 6, 0, '0 years'],
+    [2019, 7, 0.5, '0.5 years'],
+    [2020, 1, 1, '1 year'],
+    [2026, 1, 7, '7 years'],
+    [2026, 6, 7, '7 years'],
+    [2026, 7, 7.5, '7.5 years'],
+    [2026, 10, 7.5, '7.5 years'],
+    [2027, 0, 7.5, '7.5 years'],
+    [2027, 1, 8, '8 years'],
+  ];
+
+  for (const [year, monthIndex, expectedYears, expectedLabel] of cases) {
+    const years = calculateExperienceYears(2019, 2, new Date(year, monthIndex, 15));
+    expect(years).toBe(expectedYears);
+    expect(formatExperienceYears(years)).toBe(expectedLabel);
+  }
+});
+
+test('about-me page displays dynamic years of experience in full or half years', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-02-15T12:00:00Z'));
+  await page.goto('/about-me');
+  await expect(page.getByText(/with 7 years of experience building/)).toBeVisible();
+
+  await page.clock.setFixedTime(new Date('2026-08-15T12:00:00Z'));
+  await page.goto('/about-me');
+  await expect(page.getByText(/with 7\.5 years of experience building/)).toBeVisible();
 });
 
 
