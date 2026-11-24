@@ -61,6 +61,10 @@ const certifications = [
         title: "Certified Kubernetes Security Specialist",
         badgeId: "c11e24ef-dc8a-4f43-b23f-766202fa94f4",
     },
+    {
+        title: "Kubestronaut",
+        badgeId: "226cb096-3ae0-49e9-82e2-a390ba775d9d",
+    },
 ];
 
 export default function AboutMe() {

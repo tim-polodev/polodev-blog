@@ -49,6 +49,7 @@ test('all certification badges are present on about-me page', async ({ page }) =
     { title: 'Certified Kubernetes Administrator', badgeId: '82f115a3-73f5-4c4e-92a2-ad21dd8cda99' },
     { title: 'Certified Kubernetes Application Developer', badgeId: '21e2ac23-ef0b-49b6-bcd7-fcfca504a930' },
     { title: 'Certified Kubernetes Security Specialist', badgeId: 'c11e24ef-dc8a-4f43-b23f-766202fa94f4' },
+    { title: 'Kubestronaut', badgeId: '226cb096-3ae0-49e9-82e2-a390ba775d9d' },
   ];
 
   for (const cert of certifications) {
